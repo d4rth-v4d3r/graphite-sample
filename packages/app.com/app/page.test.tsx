@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import Home from './page';
 import { Task } from 'shared-types';
 import * as api from '@/lib/api';
@@ -7,6 +7,7 @@ import * as api from '@/lib/api';
 // Mock the API module
 vi.mock('@/lib/api', () => ({
   fetchTasks: vi.fn(),
+  createTask: vi.fn(),
 }));
 
 describe('Home page', () => {
@@ -73,5 +74,61 @@ describe('Home page', () => {
     });
 
     expect(screen.getByText(`Error: ${errorMessage}`)).toBeInTheDocument();
+  });
+
+  it('refreshes task list after task creation', async () => {
+    const newTask: Task = {
+      id: '3',
+      title: 'New Task',
+      description: 'New Description',
+      completed: false,
+      category: 'personal',
+      priority: 'medium',
+      createdAt: '2024-01-03T00:00:00Z',
+      updatedAt: '2024-01-03T00:00:00Z',
+    };
+
+    // First fetch returns initial tasks
+    (api.fetchTasks as ReturnType<typeof vi.fn>)
+      .mockResolvedValueOnce(mockTasks)
+      .mockResolvedValueOnce([...mockTasks, newTask]);
+
+    (api.createTask as ReturnType<typeof vi.fn>).mockResolvedValue(newTask);
+
+    render(<Home />);
+
+    // Wait for initial load
+    await waitFor(() => {
+      expect(screen.queryByText('Loading tasks...')).not.toBeInTheDocument();
+    });
+
+    // Initial tasks should be displayed
+    expect(screen.getByText('Test Task 1')).toBeInTheDocument();
+    expect(screen.getByText('Test Task 2')).toBeInTheDocument();
+    expect(screen.queryByText('New Task')).not.toBeInTheDocument();
+
+    // Fill in the form
+    const titleInput = screen.getByLabelText(/title/i);
+    fireEvent.change(titleInput, { target: { value: 'New Task' } });
+
+    const descriptionInput = screen.getByLabelText(/description/i);
+    fireEvent.change(descriptionInput, { target: { value: 'New Description' } });
+
+    // Submit the form
+    const submitButton = screen.getByRole('button', { name: /create task/i });
+    fireEvent.click(submitButton);
+
+    // Wait for the new task to appear
+    await waitFor(() => {
+      expect(screen.getByText('New Task')).toBeInTheDocument();
+    });
+
+    // Verify fetchTasks was called twice (initial + refresh)
+    expect(api.fetchTasks).toHaveBeenCalledTimes(2);
+
+    // All tasks should be displayed
+    expect(screen.getByText('Test Task 1')).toBeInTheDocument();
+    expect(screen.getByText('Test Task 2')).toBeInTheDocument();
+    expect(screen.getByText('New Task')).toBeInTheDocument();
   });
 });

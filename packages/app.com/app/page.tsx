@@ -4,18 +4,30 @@ import { useEffect, useState } from 'react';
 import { Task } from 'shared-types';
 import { fetchTasks } from '@/lib/api';
 import { TaskList } from '@/components/TaskList';
+import { TaskForm } from '@/components/TaskForm';
 
 export default function Home() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const loadTasks = async () => {
+    try {
+      const fetchedTasks = await fetchTasks();
+      setTasks(fetchedTasks);
+      setError(null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load tasks');
+    }
+  };
+
   useEffect(() => {
-    fetchTasks()
-      .then(setTasks)
-      .catch((err) => setError(err.message))
-      .finally(() => setLoading(false));
+    loadTasks().finally(() => setLoading(false));
   }, []);
+
+  const handleTaskCreated = () => {
+    loadTasks();
+  };
 
   if (loading) {
     return (
@@ -36,6 +48,7 @@ export default function Home() {
   return (
     <main className="max-w-2xl mx-auto p-8">
       <h1 className="text-3xl font-bold mb-6 text-gray-900 dark:text-gray-100">Task Manager</h1>
+      <TaskForm onTaskCreated={handleTaskCreated} />
       <TaskList tasks={tasks} />
     </main>
   );
