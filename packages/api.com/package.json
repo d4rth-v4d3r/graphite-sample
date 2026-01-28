@@ -1,12 +1,23 @@
 {
   "name": "api.com",
   "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "type-check": "tsc --noEmit"
+  },
   "dependencies": {
-    "express": "5.1.0"
+    "express": "5.1.0",
+    "shared-types": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "20.11.17",
     "@types/express": "5.0.0",
-    "typescript": "5.8.3"
+    "typescript": "5.8.3",
+    "tsx": "^4.19.2",
+    "vitest": "^2.1.8"
   }
 }

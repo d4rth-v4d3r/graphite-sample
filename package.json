@@ -5,13 +5,30 @@
     "packages/*"
   ],
   "scripts": {
+    "dev": "concurrently \"bun run dev:api\" \"bun run dev:app\"",
+    "dev:api": "cd packages/api.com && bun run dev",
+    "dev:app": "cd packages/app.com && bun run dev",
+    "test": "bun test --workspace",
+    "test:ui": "bun test --workspace --ui",
+    "type-check": "bun run --workspace type-check",
+    "format": "prettier --write .",
     "lint": "oxlint",
-    "lint:fix": "oxlint --fix"
+    "lint:fix": "oxlint --fix",
+    "prepare": "husky"
   },
   "devDependencies": {
-    "oxlint": "^1.42.0"
+    "concurrently": "^9.1.2",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.2.11",
+    "oxlint": "^1.42.0",
+    "prettier": "^3.4.2"
   },
   "dependencies": {
     "vercel": "^50.7.1"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx,json}": [
+      "prettier --write"
+    ]
   }
 }
