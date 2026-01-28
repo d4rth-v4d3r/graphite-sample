@@ -12,6 +12,7 @@
     "test:ui": "bun test --workspace --ui",
     "type-check": "bun run --workspace type-check",
     "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "lint": "oxlint",
     "lint:fix": "oxlint --fix",
     "prepare": "husky"

@@ -57,9 +57,11 @@ graphite-sample/
 
 - Bun - Package manager and runtime
 - TypeScript - Language
-- Prettier - Code formatting
+- Prettier - Code formatting (auto-formats on commit)
 - Husky + lint-staged - Git hooks for auto-formatting
-- Oxlint - Fast linting
+- Oxlint - Fast Rust-based linting (finds code issues)
+
+**Note on tooling:** We use oxlint (linter) + Prettier (formatter) because they serve different purposes. Oxlint finds code quality issues and bugs, while Prettier enforces consistent formatting. The full oxc formatter isn't yet available as a CLI tool.
 
 ## Development Workflow
 
