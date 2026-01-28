@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { TaskList } from './TaskList';
 import { Task } from 'shared-types';
@@ -26,8 +26,10 @@ describe('TaskList', () => {
     },
   ];
 
+  const mockOnToggle = vi.fn();
+
   it('renders multiple TaskItem components', () => {
-    render(<TaskList tasks={mockTasks} />);
+    render(<TaskList tasks={mockTasks} onToggle={mockOnToggle} />);
 
     expect(screen.getByText('Task 1')).toBeInTheDocument();
     expect(screen.getByText('Task 2')).toBeInTheDocument();
@@ -35,13 +37,13 @@ describe('TaskList', () => {
   });
 
   it('shows empty state message when tasks array is empty', () => {
-    render(<TaskList tasks={[]} />);
+    render(<TaskList tasks={[]} onToggle={mockOnToggle} />);
 
     expect(screen.getByText('No tasks yet. Create one to get started!')).toBeInTheDocument();
   });
 
   it('passes correct props to TaskItem', () => {
-    render(<TaskList tasks={[mockTasks[0]]} />);
+    render(<TaskList tasks={[mockTasks[0]]} onToggle={mockOnToggle} />);
 
     // Verify task content is displayed (TaskItem receives correct props)
     expect(screen.getByText('Task 1')).toBeInTheDocument();
