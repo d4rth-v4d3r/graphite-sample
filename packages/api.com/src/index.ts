@@ -17,7 +17,7 @@ class ApiError extends Error {
   constructor(
     public statusCode: number,
     public code: string,
-    message: string,
+    message: string
   ) {
     super(message);
     this.name = 'ApiError';
@@ -34,12 +34,15 @@ function findTaskById(id: string): Task {
 }
 
 // Helper function to validate task input
-function validateTaskInput(data: {
-  title?: string;
-  description?: string;
-  category?: string;
-  priority?: string;
-}, isUpdate = false): void {
+function validateTaskInput(
+  data: {
+    title?: string;
+    description?: string;
+    category?: string;
+    priority?: string;
+  },
+  isUpdate = false
+): void {
   // Validate title
   if (!isUpdate && !data.title) {
     throw new ApiError(400, 'VALIDATION_ERROR', 'Title is required');
@@ -128,7 +131,7 @@ app.get('/api/tasks', (req, res) => {
     filteredTasks = filteredTasks.filter(
       (task) =>
         task.title.toLowerCase().includes(searchTerm) ||
-        task.description?.toLowerCase().includes(searchTerm),
+        task.description?.toLowerCase().includes(searchTerm)
     );
   }
 
