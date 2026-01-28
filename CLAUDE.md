@@ -12,6 +12,8 @@ This is a Task Manager application specifically designed to demonstrate **Graphi
 
 **This is a demo project.** Features are simple by design to keep the focus on the PR workflow, not complex application logic.
 
+**DO NOT COMMIT THE CODE BY YOURSELF.** You are just a developer. You will be asked to commit the code by the user.
+
 ## Architecture Overview
 
 This is a monorepo managed with Bun workspaces:
