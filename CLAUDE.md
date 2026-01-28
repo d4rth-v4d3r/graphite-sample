@@ -318,7 +318,7 @@ Track the implementation progress of all features. Update status and PR numbers 
 | #   | Feature              | Description                     | Key Files                                  | Dependencies | Status      | PR  |
 | --- | -------------------- | ------------------------------- | ------------------------------------------ | ------------ | ----------- | --- |
 | 1   | Shared Types         | Define Task interface and types | `packages/shared-types/src/index.ts`       | None         | Completed   | -   |
-| 2   | Basic CRUD Backend   | Implement task API endpoints    | `packages/api.com/src/index.ts`            | #1           | Not Started | -   |
+| 2   | Basic CRUD Backend   | Implement task API endpoints    | `packages/api.com/src/index.ts`            | #1           | Completed   | -   |
 | 3   | Basic Frontend UI    | Display task list               | `packages/app.com/app/page.tsx`            | #1, #2       | Not Started | -   |
 | 4   | Add Task Form        | Create new tasks UI             | `packages/app.com/components/TaskForm.tsx` | #3           | Not Started | -   |
 | 5   | Toggle Completion    | Mark tasks complete/incomplete  | `packages/app.com/components/TaskItem.tsx` | #3           | Not Started | -   |
