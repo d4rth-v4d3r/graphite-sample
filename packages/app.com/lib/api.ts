@@ -1,6 +1,6 @@
 import { Task } from 'shared-types';
 
-const API_BASE = 'https://graphite-sample-api-com-git-r-55e7d0-ederchamale-6767s-projects.vercel.app/api';
+const API_BASE = `${process.env.NEXT_PUBLIC_API_URL}/api`;
 
 /**
  * Fetch all tasks from the backend API
