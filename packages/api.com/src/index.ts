@@ -16,4 +16,9 @@ app.get('/api/posts/:postId/comments/:commentId', (_req, res) => {
   res.json({ postId: _req.params.postId, commentId: _req.params.commentId });
 });
 
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+  console.log(`API server running on http://localhost:${PORT}`);
+});
+
 export default app;
