@@ -1,6 +1,6 @@
 import express from 'express';
 // Shared types will be imported here during feature implementation
-// import type { Task } from 'shared-types';
+// import type { Task, TaskCategory, TaskPriority, TaskStats } from 'shared-types';
 
 const app = express();
 
