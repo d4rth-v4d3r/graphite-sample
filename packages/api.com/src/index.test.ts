@@ -36,17 +36,11 @@ describe('Task Manager API', () => {
 
     it('should filter by completed status', async () => {
       // Create completed and incomplete tasks
-      const task1 = await request(app)
-        .post('/api/tasks')
-        .send({ title: 'Completed Task' });
+      const task1 = await request(app).post('/api/tasks').send({ title: 'Completed Task' });
 
-      await request(app)
-        .put(`/api/tasks/${task1.body.task.id}`)
-        .send({ completed: true });
+      await request(app).put(`/api/tasks/${task1.body.task.id}`).send({ completed: true });
 
-      await request(app)
-        .post('/api/tasks')
-        .send({ title: 'Incomplete Task' });
+      await request(app).post('/api/tasks').send({ title: 'Incomplete Task' });
 
       // Filter for completed tasks
       const completedResponse = await request(app).get('/api/tasks?completed=true');
@@ -62,13 +56,9 @@ describe('Task Manager API', () => {
     });
 
     it('should filter by category', async () => {
-      await request(app)
-        .post('/api/tasks')
-        .send({ title: 'Work Task', category: 'work' });
+      await request(app).post('/api/tasks').send({ title: 'Work Task', category: 'work' });
 
-      await request(app)
-        .post('/api/tasks')
-        .send({ title: 'Personal Task', category: 'personal' });
+      await request(app).post('/api/tasks').send({ title: 'Personal Task', category: 'personal' });
 
       const response = await request(app).get('/api/tasks?category=work');
 
@@ -78,13 +68,9 @@ describe('Task Manager API', () => {
     });
 
     it('should filter by priority', async () => {
-      await request(app)
-        .post('/api/tasks')
-        .send({ title: 'High Priority', priority: 'high' });
+      await request(app).post('/api/tasks').send({ title: 'High Priority', priority: 'high' });
 
-      await request(app)
-        .post('/api/tasks')
-        .send({ title: 'Low Priority', priority: 'low' });
+      await request(app).post('/api/tasks').send({ title: 'Low Priority', priority: 'low' });
 
       const response = await request(app).get('/api/tasks?priority=high');
 
@@ -143,9 +129,7 @@ describe('Task Manager API', () => {
 
   describe('GET /api/tasks/:id', () => {
     it('should return a task by id', async () => {
-      const createResponse = await request(app)
-        .post('/api/tasks')
-        .send({ title: 'Test Task' });
+      const createResponse = await request(app).post('/api/tasks').send({ title: 'Test Task' });
 
       const taskId = createResponse.body.task.id;
       const response = await request(app).get(`/api/tasks/${taskId}`);
@@ -165,14 +149,12 @@ describe('Task Manager API', () => {
 
   describe('POST /api/tasks', () => {
     it('should create a task with valid data', async () => {
-      const response = await request(app)
-        .post('/api/tasks')
-        .send({
-          title: 'New Task',
-          description: 'Task description',
-          category: 'work',
-          priority: 'high',
-        });
+      const response = await request(app).post('/api/tasks').send({
+        title: 'New Task',
+        description: 'Task description',
+        category: 'work',
+        priority: 'high',
+      });
 
       expect(response.status).toBe(201);
       expect(response.body.task).toMatchObject({
@@ -188,9 +170,7 @@ describe('Task Manager API', () => {
     });
 
     it('should apply default values for category and priority', async () => {
-      const response = await request(app)
-        .post('/api/tasks')
-        .send({ title: 'Task with defaults' });
+      const response = await request(app).post('/api/tasks').send({ title: 'Task with defaults' });
 
       expect(response.status).toBe(201);
       expect(response.body.task.category).toBe('personal');
@@ -217,9 +197,7 @@ describe('Task Manager API', () => {
     });
 
     it('should reject empty title after trim', async () => {
-      const response = await request(app)
-        .post('/api/tasks')
-        .send({ title: '   ' });
+      const response = await request(app).post('/api/tasks').send({ title: '   ' });
 
       expect(response.status).toBe(400);
       expect(response.body.error.code).toBe('VALIDATION_ERROR');
@@ -228,9 +206,7 @@ describe('Task Manager API', () => {
 
     it('should reject title exceeding 200 characters', async () => {
       const longTitle = 'a'.repeat(201);
-      const response = await request(app)
-        .post('/api/tasks')
-        .send({ title: longTitle });
+      const response = await request(app).post('/api/tasks').send({ title: longTitle });
 
       expect(response.status).toBe(400);
       expect(response.body.error.code).toBe('VALIDATION_ERROR');
@@ -239,9 +215,7 @@ describe('Task Manager API', () => {
 
     it('should accept title with exactly 200 characters', async () => {
       const exactTitle = 'a'.repeat(200);
-      const response = await request(app)
-        .post('/api/tasks')
-        .send({ title: exactTitle });
+      const response = await request(app).post('/api/tasks').send({ title: exactTitle });
 
       expect(response.status).toBe(201);
     });
@@ -290,15 +264,13 @@ describe('Task Manager API', () => {
       // Wait a bit to ensure timestamp changes
       await new Promise((resolve) => setTimeout(resolve, 10));
 
-      const updateResponse = await request(app)
-        .put(`/api/tasks/${taskId}`)
-        .send({
-          title: 'Updated Title',
-          description: 'New description',
-          completed: true,
-          category: 'work',
-          priority: 'high',
-        });
+      const updateResponse = await request(app).put(`/api/tasks/${taskId}`).send({
+        title: 'Updated Title',
+        description: 'New description',
+        completed: true,
+        category: 'work',
+        priority: 'high',
+      });
 
       expect(updateResponse.status).toBe(200);
       expect(updateResponse.body.task.title).toBe('Updated Title');
@@ -337,31 +309,23 @@ describe('Task Manager API', () => {
     });
 
     it('should validate updated fields', async () => {
-      const createResponse = await request(app)
-        .post('/api/tasks')
-        .send({ title: 'Test Task' });
+      const createResponse = await request(app).post('/api/tasks').send({ title: 'Test Task' });
 
       const taskId = createResponse.body.task.id;
 
       // Try to update with invalid category
-      const response = await request(app)
-        .put(`/api/tasks/${taskId}`)
-        .send({ category: 'invalid' });
+      const response = await request(app).put(`/api/tasks/${taskId}`).send({ category: 'invalid' });
 
       expect(response.status).toBe(400);
       expect(response.body.error.code).toBe('VALIDATION_ERROR');
     });
 
     it('should allow updating title to valid new value', async () => {
-      const createResponse = await request(app)
-        .post('/api/tasks')
-        .send({ title: 'Original' });
+      const createResponse = await request(app).post('/api/tasks').send({ title: 'Original' });
 
       const taskId = createResponse.body.task.id;
 
-      const response = await request(app)
-        .put(`/api/tasks/${taskId}`)
-        .send({ title: 'New Title' });
+      const response = await request(app).put(`/api/tasks/${taskId}`).send({ title: 'New Title' });
 
       expect(response.status).toBe(200);
       expect(response.body.task.title).toBe('New Title');
@@ -392,27 +356,18 @@ describe('Task Manager API', () => {
     });
 
     it('should actually remove task from list', async () => {
-      await request(app)
-        .post('/api/tasks')
-        .send({ title: 'Task 1' });
+      await request(app).post('/api/tasks').send({ title: 'Task 1' });
 
-      const task2Response = await request(app)
-        .post('/api/tasks')
-        .send({ title: 'Task 2' });
+      const task2Response = await request(app).post('/api/tasks').send({ title: 'Task 2' });
 
-      await request(app)
-        .post('/api/tasks')
-        .send({ title: 'Task 3' });
+      await request(app).post('/api/tasks').send({ title: 'Task 3' });
 
       // Delete middle task
       await request(app).delete(`/api/tasks/${task2Response.body.task.id}`);
 
       const listResponse = await request(app).get('/api/tasks');
       expect(listResponse.body.tasks).toHaveLength(2);
-      expect(listResponse.body.tasks.map((t: Task) => t.title)).toEqual([
-        'Task 1',
-        'Task 3',
-      ]);
+      expect(listResponse.body.tasks.map((t: Task) => t.title)).toEqual(['Task 1', 'Task 3']);
     });
   });
 
@@ -449,9 +404,7 @@ describe('Task Manager API', () => {
         .send({ title: 'Task 4', category: 'other', priority: 'high' });
 
       // Mark one as completed
-      await request(app)
-        .put(`/api/tasks/${task1.body.task.id}`)
-        .send({ completed: true });
+      await request(app).put(`/api/tasks/${task1.body.task.id}`).send({ completed: true });
 
       const response = await request(app).get('/api/stats');
 
@@ -470,9 +423,7 @@ describe('Task Manager API', () => {
         .post('/api/tasks')
         .send({ title: 'Task 1', category: 'work' });
 
-      await request(app)
-        .post('/api/tasks')
-        .send({ title: 'Task 2', category: 'personal' });
+      await request(app).post('/api/tasks').send({ title: 'Task 2', category: 'personal' });
 
       // Initial stats
       let response = await request(app).get('/api/stats');
